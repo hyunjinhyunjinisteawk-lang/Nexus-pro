@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS PRO - AI Directory</title>
+  <style>
+    :root {
+      --bg-main: #09090b;
+      --card-bg: #121215;
+      --card-border: #222228;
+      --card-hover: #1a1a20;
+      --text-primary: #ededed;
+      --text-secondary: #80808e;
+      --accent: #3b82f6;
+      --tag-bg: #1c1c24;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 30px 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app-container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 30px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .logo-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    .badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      background: #1e293b;
+      color: #60a5fa;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #1d4ed8;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin: 0 0 20px 0;
+    }
+
+    .search-wrapper {
+      margin-bottom: 16px;
+    }
+
+    #searchInput {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background-color: var(--card-bg);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    #searchInput:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .category-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: none;
+    }
+
+    .category-buttons::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-btn {
+      background: var(--card-bg);
+      color: var(--text-secondary);
+      border: 1px solid var(--card-border);
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .cat-btn.active, .cat-btn:hover {
+      background: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
+    }
+
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .ai-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 18px;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .ai-card:hover {
+      border-color: #3b82f6;
+      background: var(--card-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .ai-card h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      background: var(--tag-bg);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+    }
+
+    .ai-card p {
+      margin: 0;
+      font-size: 0.825rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <header>
+    <div class="brand">
+      <span class="logo-dot"></span>
+      <h1>NEXUS</h1>
+      <span class="badge">PRO</span>
+    </div>
+    <p class="subtitle">Yapay zeka araçları ve hızlı erişim dizini</p>
+    
+    <div class="search-wrapper">
+      <input type="text" id="searchInput" placeholder="Araç veya yetenek ara (Örn: Claude, Müzik, Kod)..." onkeyup="filterAI()">
+    </div>
+
+    <div class="category-buttons">
+      <button class="cat-btn active" onclick="filterCategory('all', this)">Tümü</button>
+      <button class="cat-btn" onclick="filterCategory('text', this)">Yazı & Dil</button>
+      <button class="cat-btn" onclick="filterCategory('image', this)">Görsel & Tasarım</button>
+      <button class="cat-btn" onclick="filterCategory('media', this)">Medya & Ses</button>
+      <button class="cat-btn" onclick="filterCategory('dev', this)">Geliştirici</button>
+    </div>
+  </header>
+
+  <div class="ai-grid" id="aiGrid">
+    <a href="https://chatgpt.com" target="_blank" class="ai-card" data-cat="text" data-name="chatgpt openai metin sohbet kod">
+      <div class="card-header">
+        <h3>ChatGPT</h3>
+        <span class="tag">LLM</span>
+      </div>
+      <p>Metin üretimi, kodlama ve genel problem çözme asistanı.</p>
+    </a>
+
+    <a href="https://claude.ai" target="_blank" class="ai-card" data-cat="text" data-name="claude anthropic metin analiz yazarlık">
+      <div class="card-header">
+        <h3>Claude</h3>
+        <span class="tag">LLM</span>
+      </div>
+      <p>Derinlemesine analiz, uzun doküman işleme ve doğal dil modelleri.</p>
+    </a>
+
+    <a href="https://gemini.google.com" target="_blank" class="ai-card" data-cat="text" data-name="gemini google sohbet arama">
+      <div class="card-header">
+        <h3>Gemini</h3>
+        <span class="tag">Multimodal</span>
+      </div>
+      <p>Google ekosistemiyle entegre, çok yönlü yapay zeka modeli.</p>
+    </a>
+
+    <a href="https://www.perplexity.ai" target="_blank" class="ai-card" data-cat="text" data-name="perplexity arama motoru kaynak bilgi">
+      <div class="card-header">
+        <h3>Perplexity</h3>
+        <span class="tag">Arama</span>
+      </div>
+      <p>Kaynak göstererek bilgi getiren yapay zeka destekli arama motoru.</p>
+    </a>
+
+    <a href="https://poe.com" target="_blank" class="ai-card" data-cat="text" data-name="poe bot sohbet çoklu modeller">
+      <div class="card-header">
+        <h3>Poe</h3>
+        <span class="tag">Platform</span>
+      </div>
+      <p>Çeşitli AI modellerini tek bir arayüz üzerinden çalıştırma çözümü.</p>
+    </a>
+
+    <a href="https://www.midjourney.com" target="_blank" class="ai-card" data-cat="image" data-name="midjourney resim görsel çizim sanat">
+      <div class="card-header">
+        <h3>Midjourney</h3>
+        <span class="tag">Görsel</span>
+      </div>
+      <p>Fotogerçekçi ve sanatsal görsel üretiminde endüstri standardı.</p>
+    </a>
+
+    <a href="https://leonardo.ai" target="_blank" class="ai-card" data-cat="image" data-name="leonardo ai resim görsel ücretsiz çizim">
+      <div class="card-header">
+        <h3>Leonardo AI</h3>
+        <span class="tag">Görsel</span>
+      </div>
+      <p>Eğitilebilir modellerle esnek ve detaylı görsel üretimi.</p>
+    </a>
+
+    <a href="https://ideogram.ai" target="_blank" class="ai-card" data-cat="image" data-name="ideogram logo yazı resim tipografi">
+      <div
+        
