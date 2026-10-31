@@ -1,103 +1,168 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nexus Pro - Sistem Bildirimi</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        body, html {
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: sans-serif;
-        }
-        video {
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-        #overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            color: #ff0000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            text-align: center;
-            padding: 20px;
-        }
-        #overlay h1 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aybüke ❤️</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: Georgia, serif;
+  background:
+    linear-gradient(#0005,#0005),
+    url("https://hizliresim.com/nxbhvyzm")
+    center/cover no-repeat;
+}
+
+.envelope {
+  width: 290px;
+  height: 190px;
+  background: #ff9ebd;
+  position: relative;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 35px #0006;
+  cursor: pointer;
+  transition: .8s;
+}
+
+.envelope:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  border-left: 145px solid transparent;
+  border-right: 145px solid transparent;
+  border-top: 110px solid #ff75a5;
+  transform-origin: top;
+  transition: .7s;
+  z-index: 3;
+}
+
+.envelope span {
+  font-size: 27px;
+  color: white;
+  font-weight: bold;
+  z-index: 4;
+  text-shadow: 1px 2px 5px #b34c72;
+}
+
+.heart {
+  position: absolute;
+  color: white;
+  font-size: 24px;
+}
+
+.h1 { left: 15px; bottom: 15px; }
+.h2 { right: 15px; bottom: 15px; }
+
+.open:before {
+  transform: rotateX(180deg);
+}
+
+.open {
+  opacity: 0;
+  transform: scale(1.5);
+  pointer-events: none;
+}
+
+.message {
+  position: absolute;
+  text-align: center;
+  color: white;
+  opacity: 0;
+  transform: scale(.5);
+  transition: 1s;
+  text-shadow: 0 2px 10px #000;
+}
+
+.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.date {
+  font-size: 35px;
+  margin-bottom: 20px;
+}
+
+.names {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 19px;
+  margin-top: 15px;
+}
+
+.confetti {
+  position: absolute;
+  top: -20px;
+  width: 10px;
+  height: 15px;
+  animation: fall 3s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+  }
+}
+</style>
 </head>
-<body onclick="forceFullscreen()">
 
-    <div id="overlay" onclick="startTrap()">
-        <h1>⚠️ SİSTEM İZNLERİ GEREKLİ ⚠️</h1>
-        <p style="color: #fff;">Devam etmek için ekrana dokunun.</p>
-    </div>
+<body>
 
-    <video id="myVideo" playsinline loop src="SnapTik.Net_7627468591947926792.mp4"></video>
+<div class="envelope" id="envelope" onclick="openLetter()">
+  <span>Aybüke</span>
+  <div class="heart h1">♥</div>
+  <div class="heart h2">♥</div>
+</div>
 
-    <script>
-        function lockHistory() {
-            for (let i = 0; i < 50; i++) {
-                window.history.pushState(null, "", window.location.href);
-            }
-        }
+<div class="message" id="message">
+  <div class="date">2026:10:29</div>
+  <div class="names">arda ⭐ ❤️ aybüke</div>
+  <div class="subtitle">♥ Her şey çok güzel olsun ♥</div>
+</div>
 
-        window.onpopstate = function() {
-            window.history.pushState(null, "", window.location.href);
-            alert("⚠️ SİSTEM KİLİTLENDİ!");
-            alert("⚠️ SAYFADAN AYRILAMAZSINIZ!");
-            forceFullscreen();
-        };
+<script>
+function openLetter() {
+  document.getElementById("envelope")
+    .classList.add("open");
 
-        function forceFullscreen() {
-            const doc = document.documentElement;
-            if (doc.requestFullscreen) {
-                doc.requestFullscreen();
-            } else if (doc.webkitRequestFullscreen) {
-                doc.webkitRequestFullscreen();
-            }
-        }
+  document.getElementById("message")
+    .classList.add("show");
 
-        function startTrap() {
-            document.getElementById("overlay").style.display = "none";
-            const video = document.getElementById("myVideo");
-            video.muted = false;
-            video.play();
-            forceFullscreen();
-            lockHistory();
-        }
+  for(let i = 0; i < 120; i++) {
+    let c = document.createElement("div");
+    c.className = "confetti";
 
-        window.onload = function() {
-            lockHistory();
-        };
-    </script>
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.backgroundColor =
+      ["#ff4f91","#fff","#ffd166","#ff9ebd"][
+        Math.floor(Math.random()*4)
+      ];
+
+    c.style.animationDelay = Math.random()*1.5 + "s";
+    document.body.appendChild(c);
+
+    setTimeout(() => c.remove(), 5000);
+  }
+}
+</script>
+
 </body>
 </html>
